@@ -1,13 +1,20 @@
 LIBPNG_VERSION ?= 1.6.37
-LIBJPG_VERSION ?= 9c
-OPENJP2_VERSION ?= 2.3.1
-LIBTIFF_VERSION ?= 4.0.9
+## changed LIBJPG_VERSION FROM 9c to 9e
+LIBJPG_VERSION ?= 9e
+## changed OPENJP2_VERSION from 2.3.1 to 2.4.0
+OPENJP2_VERSION ?= 2.4.0
+## LIBTIFF_VERSION FROM 4.0.9 to 4.3.0
+LIBTIFF_VERSION ?= 4.3.0
 BZIP2_VERSION ?= 1.0.6
-LIBWEBP_VERSION ?= 0.6.1
-IMAGEMAGICK_VERSION ?= 7.0.8-45
-GHOSTSCRIPT_VERSION ?= 9.23
+## changed LIBWEBP_VERSION from 0.6.1 to 1.2.2
+LIBWEBP_VERSION ?= 1.2.2
+## changed IMAGEMAGICK_VERSION from 7.0.8-45 to 7.1.0-31
+IMAGEMAGICK_VERSION ?= 7.1.0-31
+## changed GHOST_SCRIPT_SOURCE from 9.23 to 9.56.1
+GHOSTSCRIPT_VERSION ?= 9.56.1
+GHOSTSCRIPT_CONDENSED_VERSION ?= gs9561
 
-TARGET_DIR ?= /opt/
+TARGET_DIR ?= ./opt
 PROJECT_ROOT = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 CACHE_DIR=$(PROJECT_ROOT)build/cache
 
@@ -155,11 +162,11 @@ $(TARGET_DIR)/bin/identify: $(IMAGE_MAGICK_SOURCE) $(LIBS)
 GHOST_SCRIPT_SOURCE=ghostscript-$(GHOSTSCRIPT_VERSION).tar.gz
 
 $(GHOST_SCRIPT_SOURCE):
-	curl -L https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs923/ghostscript-9.23.tar.gz -o ghostscript-9.23.tar.gz
+	curl -L https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/$(GHOSTSCRIPT_CONDENSED_VERSION)/ghostscript-$(GHOSTSCRIPT_VERSION).tar.gz -o $(GHOST_SCRIPT_SOURCE)
 
 $(TARGET_DIR)/bin/gs: $(GHOST_SCRIPT_SOURCE)
-	tar -zxvf ghostscript-9.23.tar.gz
-	cd ghostscript-9.23
+	tar xf $<
+	cd ghost*
 	./configure --disable-compile-inits --with-x --with-drivers=ALL --without-luratech --with-libiconv=gnu --prefix=$(TARGET_DIR)
 	make
 	make install
